@@ -1,12 +1,13 @@
 package br.cnec.fcsl.sistema;
 
+import br.cnec.fcsl.gui.Autenticacao;
+
+
 public class Principal {
 
 	public static void main(String[] args) {
 		
-		SendMail sm = new SendMail("smtp.gmail.com","465");
-		sm.sendMail("oliveira.daniloneri@gmail.com","cristianhenrique06@hotmail.com","Teste","Envio de email usando a API JavaMail");
-		
+		new Autenticacao().setVisible(true);
 	}
 
 }

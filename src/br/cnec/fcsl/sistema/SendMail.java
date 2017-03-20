@@ -6,20 +6,25 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import br.cnec.fcsl.gui.Autenticacao;
+import br.cnec.fcsl.gui.Email;
+
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
 
 public class SendMail {
 	private String mailSMTPServer;
 	private String mailSMTPServerPort;
-
+	private Autenticacao autenticacao = new Autenticacao();
 	/*
 	 * quando instanciar um Objeto ja sera atribuido o servidor SMTP do GMAIL e
 	 * a porta usada por ele
 	 */
 
-	SendMail() { // Para o GMAIL
+	public SendMail() { // Para o GMAIL
 		mailSMTPServer = "smtp.gmail.com";
+		//mailSMTPServer = "smtp.mail.yahoo.com";
 		mailSMTPServerPort = "465";
 	}
 
@@ -62,8 +67,10 @@ public class SendMail {
 		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 		props.put("mail.smtp.socketFactory.fallback", "false");
 		// Cria um autenticador que sera usado a seguir
-		SimpleAuth auth = null;
-		auth = new SimpleAuth("oliveira.daniloneri@gmail.com", "37744324");
+		//SimpleAuth auth = null;
+
+		//auth = new SimpleAuth("oliveira.daniloneri@gmail.com", "37744324");
+		 SimpleAuth auth = new SimpleAuth(autenticacao.getEmail(), autenticacao.getSenha());
 		// Session - objeto que ira realizar a conexão com o servidor
 		/*
 		 * Como há necessidade de autenticação é criada uma autenticacao que é
@@ -73,6 +80,7 @@ public class SendMail {
 		Session session = Session.getDefaultInstance(props, auth);
 		session.setDebug(true); // Habilita o LOG das ações executadas durante o
 								// envio do email
+	
 		// Objeto que contém a mensagem
 		Message msg = new MimeMessage(session);
 		try {
@@ -96,7 +104,7 @@ public class SendMail {
 			 * 1 - define o servidor smtp 2 - seu nome de usuario do gmail 3 -
 			 * sua senha do gmail
 			 */
-			tr.connect(mailSMTPServer, "oliveira.daniloneri@gmail.com", "37744324");
+			tr.connect(mailSMTPServer, autenticacao.getEmail(), autenticacao.getSenha());
 			msg.saveChanges(); // don't forget this
 			// envio da mensagem
 			tr.sendMessage(msg, msg.getAllRecipients());
@@ -107,6 +115,7 @@ public class SendMail {
 			e.printStackTrace();
 		}
 	}
+	
 }
 
 // clase que retorna uma autenticacao para ser enviada e verificada pelo
