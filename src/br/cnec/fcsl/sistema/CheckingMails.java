@@ -56,7 +56,7 @@ public class CheckingMails {
          System.out.println("Texto: " + message.getContent().toString());
       }
 
-      // fechando conexoes
+      // fechando conexoes 
       emailFolder.close(false);
       store.close();
 
@@ -67,6 +67,7 @@ public class CheckingMails {
       } catch (Exception e) {
          e.printStackTrace();
       }
+      //
    }
 
  
