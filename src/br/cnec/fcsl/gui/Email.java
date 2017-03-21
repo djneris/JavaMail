@@ -1,6 +1,6 @@
 package br.cnec.fcsl.gui;
 
-import java.awt.BorderLayout;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -11,17 +11,16 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JPasswordField;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 
+import br.cnec.fcsl.sistema.CheckingMails;
 import br.cnec.fcsl.sistema.SendMail;
 
 import java.awt.Color;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.awt.event.ActionEvent;
 
 public class Email extends JFrame implements ActionListener {
@@ -35,7 +34,8 @@ public class Email extends JFrame implements ActionListener {
 	private JButton botaoEnviar;
 	private JLabel lblAssunto;
 	private JTextField campoAssunto;
-	private Autenticacao aut = new Autenticacao();
+	private JButton btnChecarEmail;
+
 
 	/**
 	 * Launch the application.
@@ -57,6 +57,7 @@ public class Email extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public Email() {
+		setTitle("Envio de E-mail");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 352);
 		contentPane = new JPanel();
@@ -80,30 +81,52 @@ public class Email extends JFrame implements ActionListener {
 
 		campoAssunto = new JTextField();
 		campoAssunto.setColumns(10);
+		
+		btnChecarEmail = new JButton("Checar Email");
+		btnChecarEmail.addActionListener(this);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
-				.createSequentialGroup().addContainerGap()
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup().addComponent(lblEmailDoDestinatario)
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addComponent(campoDestinatario, GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE))
-						.addGroup(gl_contentPane.createSequentialGroup().addComponent(lblAssunto).addGap(18)
-								.addComponent(campoAssunto, GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE))
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(lblEmailDoDestinatario)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(campoDestinatario, GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(lblAssunto)
+							.addGap(18)
+							.addComponent(campoAssunto, GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE))
 						.addComponent(lblMensagem)
 						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
-						.addComponent(botaoEnviar, Alignment.TRAILING))
-				.addContainerGap()));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
-				.createSequentialGroup().addGap(20)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(lblEmailDoDestinatario)
-						.addComponent(campoDestinatario, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(18)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(lblAssunto).addComponent(
-						campoAssunto, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(18).addComponent(lblMensagem).addGap(18)
-				.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE).addGap(28)
-				.addComponent(botaoEnviar).addContainerGap(93, Short.MAX_VALUE)));
+						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+							.addComponent(btnChecarEmail)
+							.addPreferredGap(ComponentPlacement.RELATED, 252, Short.MAX_VALUE)
+							.addComponent(botaoEnviar)))
+					.addContainerGap())
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(20)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblEmailDoDestinatario)
+						.addComponent(campoDestinatario, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblAssunto)
+						.addComponent(campoAssunto, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addComponent(lblMensagem)
+					.addGap(18)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE)
+					.addGap(28)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(botaoEnviar)
+						.addComponent(btnChecarEmail))
+					.addContainerGap(21, Short.MAX_VALUE))
+		);
 
 		campoMensagem = new JTextArea();
 		campoMensagem.setLineWrap(true);
@@ -112,6 +135,9 @@ public class Email extends JFrame implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnChecarEmail) {
+			do_btnChecarEmail_actionPerformed(e);
+		}
 		if (e.getSource() == botaoEnviar) {
 			do_botaoEnviar_actionPerformed(e);
 		}
@@ -119,9 +145,13 @@ public class Email extends JFrame implements ActionListener {
 
 	protected void do_botaoEnviar_actionPerformed(ActionEvent e) {
 
-		SendMail sm = new SendMail();
-		sm.sendMail(aut.getEmail(), campoDestinatario.getText(), campoAssunto.getText(), campoMensagem.getText());
+		SendMail sm = new SendMail(Autenticacao.getServidorSMTP(),Autenticacao.getPortaSMTP());
+		sm.sendMail(Autenticacao.getEmail(), campoDestinatario.getText(), campoAssunto.getText(), campoMensagem.getText());
 
 	}
 
+	protected void do_btnChecarEmail_actionPerformed(ActionEvent e) {
+		CheckingMails ck = new CheckingMails();
+		ck.check(Autenticacao.getServidorPop3(), Autenticacao.getEmail(), Autenticacao.getSenha());
+	}
 }
