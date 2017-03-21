@@ -1,6 +1,5 @@
 package br.cnec.fcsl.gui;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -11,7 +10,6 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JPasswordField;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
@@ -21,7 +19,6 @@ import br.cnec.fcsl.sistema.SendMail;
 import java.awt.Color;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.awt.event.ActionEvent;
 
 public class Email extends JFrame implements ActionListener {
@@ -35,7 +32,6 @@ public class Email extends JFrame implements ActionListener {
 	private JButton botaoEnviar;
 	private JLabel lblAssunto;
 	private JTextField campoAssunto;
-	private Autenticacao aut = new Autenticacao();
 
 	/**
 	 * Launch the application.
@@ -118,10 +114,12 @@ public class Email extends JFrame implements ActionListener {
 	}
 
 	protected void do_botaoEnviar_actionPerformed(ActionEvent e) {
-
+	
+	
 		SendMail sm = new SendMail();
-		sm.sendMail(aut.getEmail(), campoDestinatario.getText(), campoAssunto.getText(), campoMensagem.getText());
+		sm.sendMail("cnecsysten@gmail.com", campoDestinatario.getText(), campoAssunto.getText(), campoMensagem.getText());
 
 	}
+
 
 }

@@ -1,13 +1,13 @@
 package br.cnec.fcsl.sistema;
 
-import br.cnec.fcsl.gui.Autenticacao;
+import br.cnec.fcsl.gui.Email;
 
 
 public class Principal {
 
 	public static void main(String[] args) {
 		
-		new Autenticacao().setVisible(true);
+		new Email().setVisible(true);
 	}
 
 }

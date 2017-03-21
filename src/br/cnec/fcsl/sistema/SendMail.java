@@ -7,7 +7,6 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import br.cnec.fcsl.gui.Autenticacao;
 import br.cnec.fcsl.gui.Email;
 
 import javax.mail.Authenticator;
@@ -16,11 +15,12 @@ import javax.mail.PasswordAuthentication;
 public class SendMail {
 	private String mailSMTPServer;
 	private String mailSMTPServerPort;
-	private Autenticacao autenticacao = new Autenticacao();
+
 	/*
 	 * quando instanciar um Objeto ja sera atribuido o servidor SMTP do GMAIL e
 	 * a porta usada por ele
 	 */
+
 
 	public SendMail() { // Para o GMAIL
 		mailSMTPServer = "smtp.gmail.com";
@@ -67,10 +67,8 @@ public class SendMail {
 		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 		props.put("mail.smtp.socketFactory.fallback", "false");
 		// Cria um autenticador que sera usado a seguir
-		//SimpleAuth auth = null;
-
-		//auth = new SimpleAuth("oliveira.daniloneri@gmail.com", "37744324");
-		 SimpleAuth auth = new SimpleAuth(autenticacao.getEmail(), autenticacao.getSenha());
+	
+		 SimpleAuth auth = new SimpleAuth("cnecsysten@gmail.com", "Cnec@2017");
 		// Session - objeto que ira realizar a conexão com o servidor
 		/*
 		 * Como há necessidade de autenticação é criada uma autenticacao que é
@@ -104,7 +102,7 @@ public class SendMail {
 			 * 1 - define o servidor smtp 2 - seu nome de usuario do gmail 3 -
 			 * sua senha do gmail
 			 */
-			tr.connect(mailSMTPServer, autenticacao.getEmail(), autenticacao.getSenha());
+			tr.connect(mailSMTPServer, "cnecsysten@gmail.com", "Cnec@2017");
 			msg.saveChanges(); // don't forget this
 			// envio da mensagem
 			tr.sendMessage(msg, msg.getAllRecipients());

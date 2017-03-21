@@ -21,6 +21,7 @@ public class CheckingMails {
       // create properties field
       Properties properties = new Properties();
 
+      
       properties.put("mail.pop3s.host", host);
       properties.put("mail.pop3s.port", "995");
       properties.put("mail.pop3s.starttls.enable", "true");
