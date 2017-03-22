@@ -6,18 +6,21 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.swing.JOptionPane;
 
 import br.cnec.fcsl.gui.Autenticacao;
 
+import javax.mail.Address;
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
 
 public class EnviarEmail {
-	private String mailSMTPServer;
-	private String mailSMTPServerPort;
-
+	
+	private String ServidorSMTP;
+	private String PortaSMTP;
 	
 	public EnviarEmail() {
+		
 	}
 
 	/*
@@ -25,12 +28,12 @@ public class EnviarEmail {
 	 * valores como string
 	 */
 
-	public EnviarEmail(String mailSMTPServer, String mailSMTPServerPort) {
-		this.mailSMTPServer = mailSMTPServer;
-		this.mailSMTPServerPort = mailSMTPServerPort;
+	public EnviarEmail(String ServidorSMTP, String PortaSMTP) {
+		this.ServidorSMTP = ServidorSMTP;
+		this.PortaSMTP = PortaSMTP;
 	}
 
-	public void sendMail(String from, String to, String subject, String message) {
+	public void sendMail(String usuario, String destino, String assunto, String mensagem) {
 		Properties props = new Properties();
 		// quem estiver utilizando um SERVIDOR PROXY descomente essa parte e
 		// atribua as propriedades do SERVIDOR PROXY utilizado
@@ -39,21 +42,18 @@ public class EnviarEmail {
 		 * props.setProperty("socksProxyHost","ip do proxy"); // IP do Servidor Proxy 
 		 * props.setProperty("socksProxyPort","porta do proxy"); // Porta do servidor Proxy
 		 */
-		props.put("mail.transport.protocol", "smtp"); // define protocolo de
-														// envio como SMTP
+		props.put("mail.transport.protocol", "smtp"); // define protocolo de  envio como SMTP														
 		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.host", mailSMTPServer); // server SMTP
+		props.put("mail.smtp.host", ServidorSMTP); // server SMTP
 		props.put("mail.smtp.auth", "true"); // ativa autenticacao
-		props.put("mail.smtp.user", from); // usuario ou seja, a conta que esta enviando o email  
 		props.put("mail.debug", "true"); //ativa o debug
-		props.put("mail.smtp.port", mailSMTPServerPort); // porta
-		props.put("mail.smtp.socketFactory.port", mailSMTPServerPort); // mesma port para o socket
+		props.put("mail.smtp.port", PortaSMTP); // porta
+		props.put("mail.smtp.socketFactory.port", PortaSMTP); // mesma port para o socket
 		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-		props.put("mail.smtp.socketFactory.fallback", "false");
+				
 		// Cria um autenticador que sera usado a seguir
-
 		Authenticator auth = new Authenticator() {
-			public PasswordAuthentication getPasswordAuthentication() {
+			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(Autenticacao.getEmail(), Autenticacao.getSenha());
 			}
 		};
@@ -71,16 +71,20 @@ public class EnviarEmail {
 		// Objeto que contém a mensagem
 		Message msg = new MimeMessage(session);
 		try {
-			// Setando o destinatário
-			msg.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
 			// Setando a origem do email
-			msg.setFrom(new InternetAddress(from));
+			msg.setFrom(new InternetAddress(usuario));
+			// Setando o destinatário
+			Address[] usuarios = InternetAddress.parse(destino);			
+			msg.setRecipients(Message.RecipientType.TO, usuarios);		
 			// Setando o assunto
-			msg.setSubject(subject);
+			msg.setSubject(assunto);
 			// Setando o conteúdo/corpo do email
-			msg.setContent(message, "text/plain");
+			msg.setContent(mensagem, "text/plain");
+			
+			
+		
 		} catch (Exception e) {
-			System.out.println(">> Erro: Completar Mensagem");
+			JOptionPane.showMessageDialog(null, "Completar Mensagem");
 			e.printStackTrace();
 		}
 		// Objeto encarregado de enviar os dados para o email
@@ -89,16 +93,19 @@ public class EnviarEmail {
 			tr = session.getTransport("smtp"); // define smtp para transporte
 			
 			/*
-			 * 1 - define o servidor smtp 2 - seu nome de usuario do 3 - sua senha 
+			 * 1 - define o servidor smtp | 2 - seu nome de usuario | 3 - sua senha 
 			 */
-			tr.connect(mailSMTPServer, Autenticacao.getEmail(), Autenticacao.getSenha());
+			tr.connect(ServidorSMTP, Autenticacao.getEmail(), Autenticacao.getSenha());
 
-			msg.saveChanges(); // don't forget this
+			msg.saveChanges(); 
 			// envio da mensagem
 			tr.sendMessage(msg, msg.getAllRecipients());
+			
+			JOptionPane.showMessageDialog(null, "Mensagem Enviada");
+			
 			tr.close();
 		} catch (Exception e) {
-			System.out.println(">> Erro: Envio Mensagem");
+			JOptionPane.showMessageDialog(null, "Erro ao Enviar Mensagem");
 			e.printStackTrace();
 		}
 	}

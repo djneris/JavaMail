@@ -42,6 +42,7 @@ public class Opcoes extends JDialog implements ActionListener {
 	public Opcoes() {
 		setTitle("Op\u00E7\u00F5es");
 		setBounds(100, 100, 300, 152);
+		this.setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -88,5 +89,6 @@ public class Opcoes extends JDialog implements ActionListener {
 	}
 	protected void do_btnNewButton_actionPerformed(ActionEvent e) {
 		new Email().setVisible(true);
+		dispose();
 	}
 }

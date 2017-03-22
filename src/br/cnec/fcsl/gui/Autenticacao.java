@@ -1,36 +1,34 @@
 package br.cnec.fcsl.gui;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import java.awt.EventQueue;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
+import javax.swing.JComboBox;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JTextField;
+import javax.swing.JPasswordField;
+import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JPasswordField;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
 
-public class Autenticacao extends JDialog implements ActionListener {
+public class Autenticacao extends JFrame implements ActionListener {
 
-	private final JPanel contentPanel = new JPanel();
+	private JPanel contentPane;
+	private JLabel lblEscolhaOServidor;
+	private JComboBox comboBox;
 	private JLabel lblEmail;
 	private JTextField campoEmail;
 	private JLabel lblSenha;
 	private JPasswordField campoSenha;
 	private JPanel panel;
 	private JButton botaoOk;
-	private JComboBox comboBox;
-	private JLabel lblEscolhaOServido;
 	private static String senha;
 	private static String email;
 	private static String servidorSMTP;
@@ -42,24 +40,34 @@ public class Autenticacao extends JDialog implements ActionListener {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		try {
-			Autenticacao dialog = new Autenticacao();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Autenticacao frame = new Autenticacao();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	/**
-	 * Create the dialog.
+	 * Create the frame.
 	 */
 	public Autenticacao() {
-		setTitle("Configura\u00E7\u00E3o do Servidor");
-		setBounds(100, 100, 466, 313);
-		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 273);
+		this.setLocationRelativeTo(null);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		
+		lblEscolhaOServidor = new JLabel("Selecione o servidor:");
+		
+		comboBox = new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Gmail", "Yahoo"}));
+		comboBox.setSelectedIndex(-1);
 		
 		lblEmail = new JLabel("E-mail:");
 		
@@ -68,62 +76,55 @@ public class Autenticacao extends JDialog implements ActionListener {
 		
 		lblSenha = new JLabel("Senha:");
 		
-		panel = new JPanel();
-		
 		campoSenha = new JPasswordField();
 		
-		comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Gmail", "Yahoo"}));
-		comboBox.setSelectedIndex(0);
-		
-		lblEscolhaOServido = new JLabel("Escolha o servidor:");
-		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
-		gl_contentPanel.setHorizontalGroup(
-			gl_contentPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPanel.createSequentialGroup()
+		panel = new JPanel();
+		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
-						.addComponent(comboBox, 0, 420, Short.MAX_VALUE)
-						.addComponent(lblEscolhaOServido)
-						.addComponent(lblEmail)
-						.addComponent(lblSenha)
-						.addComponent(campoEmail, GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
-						.addComponent(campoSenha, GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addComponent(panel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
+						.addComponent(comboBox, Alignment.LEADING, 0, 404, Short.MAX_VALUE)
+						.addComponent(lblEscolhaOServidor, Alignment.LEADING)
+						.addComponent(lblEmail, Alignment.LEADING)
+						.addComponent(campoEmail, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
+						.addComponent(lblSenha, Alignment.LEADING)
+						.addComponent(campoSenha, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE))
 					.addContainerGap())
 		);
-		gl_contentPanel.setVerticalGroup(
-			gl_contentPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_contentPanel.createSequentialGroup()
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(lblEscolhaOServido)
-					.addGap(13)
+					.addComponent(lblEscolhaOServidor)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addComponent(lblEmail)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(campoEmail, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(25)
-					.addComponent(lblSenha)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(lblSenha)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(campoSenha, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(25)
-					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
-					.addGap(51))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(37, Short.MAX_VALUE))
 		);
-		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		botaoOk = new JButton("OK");
 		botaoOk.addActionListener(this);
 		panel.add(botaoOk);
-		contentPanel.setLayout(gl_contentPanel);
+		contentPane.setLayout(gl_contentPane);
 	}
-	public void actionPerformed(ActionEvent arg0) {
-		if (arg0.getSource() == botaoOk) {
-			do_botaoOk_actionPerformed(arg0);
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == botaoOk) {
+			do_botaoOk_actionPerformed(e);
 		}
 	}
-	protected void do_botaoOk_actionPerformed(ActionEvent arg0) {
+	protected void do_botaoOk_actionPerformed(ActionEvent e) {
 		
 		if(comboBox.getSelectedIndex() == 0){
 			setServidorSMTP("smtp.gmail.com");
@@ -137,6 +138,7 @@ public class Autenticacao extends JDialog implements ActionListener {
 		setSenha(campoSenha.getText());
 		
 		new Opcoes().setVisible(true);	
+		
 	}
 
 	public static String getSenha() {
@@ -159,18 +161,18 @@ public class Autenticacao extends JDialog implements ActionListener {
 		return servidorSMTP;
 	}
 
-	public static void setServidorSMTP(String servidor) {
-		Autenticacao.servidorSMTP = servidor;
+	public static void setServidorSMTP(String servidorSMTP) {
+		Autenticacao.servidorSMTP = servidorSMTP;
 	}
 
 	public static String getPortaSMTP() {
 		return portaSMTP;
 	}
 
-	public static void setPortaSMTP(String porta) {
-		Autenticacao.portaSMTP = porta;
+	public static void setPortaSMTP(String portaSMTP) {
+		Autenticacao.portaSMTP = portaSMTP;
 	}
-	
+
 	public static String getServidorPop3() {
 		return servidorPop3;
 	}
@@ -186,4 +188,6 @@ public class Autenticacao extends JDialog implements ActionListener {
 	public static void setPortaPop3(String portaPop3) {
 		Autenticacao.portaPop3 = portaPop3;
 	}
+
+
 }
