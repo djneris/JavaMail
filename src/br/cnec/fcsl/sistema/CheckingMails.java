@@ -2,7 +2,6 @@ package br.cnec.fcsl.sistema;
 
 import java.util.Properties;
 
-import javax.mail.Authenticator;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -13,12 +12,13 @@ import javax.mail.Store;
 
 public class CheckingMails {
 
-   public static void check(String host, String storeType, String user,
-      String password) 
-   {
+   public void check(String host, String user, String password) {
+	   
+	   System.out.println(user+","+password);
+	   
       try {
 
-      // create properties field
+      // propriedades da conexão
       Properties properties = new Properties();
 
       
@@ -26,26 +26,25 @@ public class CheckingMails {
       properties.put("mail.pop3s.port", "995");
       properties.put("mail.pop3s.starttls.enable", "true");
 
-      // Setup authentication, get session
+      // autenticação
       Session emailSession = Session.getInstance(properties,
          new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-               return new PasswordAuthentication(
-                  "cnecsysten@gmail.com", "Cnec@2017");
+               return new PasswordAuthentication(user, password);
             }
          });
-      // emailSession.setDebug(true);
+      //emailSession.setDebug(true);
 
-      // create the POP3 store object and connect with the pop server
+      // Criação do objeto de armazenamento POP3 e conexão com o servidor pop
       Store store = emailSession.getStore("pop3s");
 
       store.connect();
 
-      // create the folder object and open it
+      // leitura da caixa de entrada
       Folder emailFolder = store.getFolder("INBOX");
       emailFolder.open(Folder.READ_ONLY);
 
-      // retrieve the messages from the folder in an array and print it
+      // Recuperar as mensagens da pasta em um array e exibi-lo
       Message[] messages = emailFolder.getMessages();
       System.out.println("messages.length---" + messages.length);
 
@@ -58,7 +57,7 @@ public class CheckingMails {
          System.out.println("Texto: " + message.getContent().toString());
       }
 
-      // close the store and folder objects
+      // fechando conexoes 
       emailFolder.close(false);
       store.close();
 
@@ -69,17 +68,8 @@ public class CheckingMails {
       } catch (Exception e) {
          e.printStackTrace();
       }
+      //
    }
 
-   public static void main(String[] args) {
-
-      String host = "pop.gmail.com";// change accordingly
-      String mailStoreType = "pop3";
-      String username = "cnecsysten@gmail.com";// change accordingly
-      String password = "Cnec@2017";// change accordingly
-
-      check(host, mailStoreType, username, password);
-
-   }
-
+ 
 }

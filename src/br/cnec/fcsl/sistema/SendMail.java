@@ -8,6 +8,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import br.cnec.fcsl.gui.Email;
+import br.cnec.fcsl.gui.Autenticacao;
+
 
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
@@ -20,8 +22,7 @@ public class SendMail {
 	 * quando instanciar um Objeto ja sera atribuido o servidor SMTP do GMAIL e
 	 * a porta usada por ele
 	 */
-
-
+	
 	public SendMail() { // Para o GMAIL
 		mailSMTPServer = "smtp.gmail.com";
 		//mailSMTPServer = "smtp.mail.yahoo.com";
@@ -33,7 +34,7 @@ public class SendMail {
 	 * valor como string
 	 */
 
-	SendMail(String mailSMTPServer, String mailSMTPServerPort) { // Para outro
+	public SendMail(String mailSMTPServer, String mailSMTPServerPort) { // Para outro
 																	// Servidor
 		this.mailSMTPServer = mailSMTPServer;
 		this.mailSMTPServerPort = mailSMTPServerPort;
@@ -67,8 +68,15 @@ public class SendMail {
 		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 		props.put("mail.smtp.socketFactory.fallback", "false");
 		// Cria um autenticador que sera usado a seguir
-	
-		 SimpleAuth auth = new SimpleAuth("cnecsysten@gmail.com", "Cnec@2017");
+
+		 Authenticator auth = new Authenticator() {
+	            public PasswordAuthentication getPasswordAuthentication() {
+	                return new PasswordAuthentication(
+	                                   Autenticacao.getEmail(), Autenticacao.getSenha()
+	                 );
+	            }
+	        };
+
 		// Session - objeto que ira realizar a conexão com o servidor
 		/*
 		 * Como há necessidade de autenticação é criada uma autenticacao que é
@@ -102,7 +110,9 @@ public class SendMail {
 			 * 1 - define o servidor smtp 2 - seu nome de usuario do gmail 3 -
 			 * sua senha do gmail
 			 */
-			tr.connect(mailSMTPServer, "cnecsysten@gmail.com", "Cnec@2017");
+
+			tr.connect(mailSMTPServer, Autenticacao.getEmail(), Autenticacao.getSenha());
+
 			msg.saveChanges(); // don't forget this
 			// envio da mensagem
 			tr.sendMessage(msg, msg.getAllRecipients());
@@ -114,20 +124,4 @@ public class SendMail {
 		}
 	}
 	
-}
-
-// clase que retorna uma autenticacao para ser enviada e verificada pelo
-// servidor smtp
-class SimpleAuth extends Authenticator {
-	public String username = null;
-	public String password = null;
-
-	public SimpleAuth(String user, String pwd) {
-		username = user;
-		password = pwd;
-	}
-
-	protected PasswordAuthentication getPasswordAuthentication() {
-		return new PasswordAuthentication(username, password);
-	}
 }
