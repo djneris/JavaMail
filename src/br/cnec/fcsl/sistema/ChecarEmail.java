@@ -10,17 +10,14 @@ import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Store;
 
-public class CheckingMails {
+public class ChecarEmail {
 
-   public void check(String host, String user, String password) {
-	   
-	   System.out.println(user+","+password);
+   public void checar(String host, String user, String password) {
 	   
       try {
 
       // propriedades da conexão
       Properties properties = new Properties();
-
       
       properties.put("mail.pop3s.host", host);
       properties.put("mail.pop3s.port", "995");
@@ -68,7 +65,7 @@ public class CheckingMails {
       } catch (Exception e) {
          e.printStackTrace();
       }
-      //
+      
    }
 
  

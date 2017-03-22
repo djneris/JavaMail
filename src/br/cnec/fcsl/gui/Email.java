@@ -14,8 +14,8 @@ import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 
-import br.cnec.fcsl.sistema.CheckingMails;
-import br.cnec.fcsl.sistema.SendMail;
+import br.cnec.fcsl.sistema.ChecarEmail;
+import br.cnec.fcsl.sistema.EnviarEmail;
 
 import java.awt.Color;
 import javax.swing.JButton;
@@ -33,7 +33,6 @@ public class Email extends JFrame implements ActionListener {
 	private JButton botaoEnviar;
 	private JLabel lblAssunto;
 	private JTextField campoAssunto;
-	private JButton btnChecarEmail;
 
 	/**
 	 * Launch the application.
@@ -79,29 +78,23 @@ public class Email extends JFrame implements ActionListener {
 
 		campoAssunto = new JTextField();
 		campoAssunto.setColumns(10);
-		
-		btnChecarEmail = new JButton("Checar Email");
-		btnChecarEmail.addActionListener(this);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
+						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
 							.addComponent(lblEmailDoDestinatario)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addComponent(campoDestinatario, GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE))
-						.addGroup(gl_contentPane.createSequentialGroup()
+						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
 							.addComponent(lblAssunto)
 							.addGap(18)
 							.addComponent(campoAssunto, GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE))
-						.addComponent(lblMensagem)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
-						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-							.addComponent(btnChecarEmail)
-							.addPreferredGap(ComponentPlacement.RELATED, 252, Short.MAX_VALUE)
-							.addComponent(botaoEnviar)))
+						.addComponent(scrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
+						.addComponent(botaoEnviar, Alignment.TRAILING)
+						.addComponent(lblMensagem))
 					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
@@ -115,14 +108,12 @@ public class Email extends JFrame implements ActionListener {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblAssunto)
 						.addComponent(campoAssunto, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
+					.addGap(25)
 					.addComponent(lblMensagem)
-					.addGap(18)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE)
 					.addGap(28)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(botaoEnviar)
-						.addComponent(btnChecarEmail))
+					.addComponent(botaoEnviar)
 					.addContainerGap(21, Short.MAX_VALUE))
 		);
 
@@ -133,9 +124,6 @@ public class Email extends JFrame implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btnChecarEmail) {
-			do_btnChecarEmail_actionPerformed(e);
-		}
 		if (e.getSource() == botaoEnviar) {
 			do_botaoEnviar_actionPerformed(e);
 		}
@@ -143,12 +131,9 @@ public class Email extends JFrame implements ActionListener {
 
 	protected void do_botaoEnviar_actionPerformed(ActionEvent e) {	
 	
-		SendMail sm = new SendMail(Autenticacao.getServidorSMTP(),Autenticacao.getPortaSMTP());
+		EnviarEmail sm = new EnviarEmail(Autenticacao.getServidorSMTP(),Autenticacao.getPortaSMTP());
 		sm.sendMail(Autenticacao.getEmail(), campoDestinatario.getText(), campoAssunto.getText(), campoMensagem.getText());
 
 	}
-	protected void do_btnChecarEmail_actionPerformed(ActionEvent e) {
-		CheckingMails ck = new CheckingMails();
-		ck.check(Autenticacao.getServidorPop3(), Autenticacao.getEmail(), Autenticacao.getSenha());
-	}
+	
 }

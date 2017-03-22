@@ -7,35 +7,25 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import br.cnec.fcsl.gui.Email;
 import br.cnec.fcsl.gui.Autenticacao;
-
 
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
 
-public class SendMail {
+public class EnviarEmail {
 	private String mailSMTPServer;
 	private String mailSMTPServerPort;
 
-	/*
-	 * quando instanciar um Objeto ja sera atribuido o servidor SMTP do GMAIL e
-	 * a porta usada por ele
-	 */
 	
-	public SendMail() { // Para o GMAIL
-		mailSMTPServer = "smtp.gmail.com";
-		//mailSMTPServer = "smtp.mail.yahoo.com";
-		mailSMTPServerPort = "465";
+	public EnviarEmail() {
 	}
 
 	/*
-	 * caso queira mudar o servidor e a porta, so enviar para o contrutor os
-	 * valor como string
+	 * para mudar o servidor e a porta, so enviar para o contrutor os
+	 * valores como string
 	 */
 
-	public SendMail(String mailSMTPServer, String mailSMTPServerPort) { // Para outro
-																	// Servidor
+	public EnviarEmail(String mailSMTPServer, String mailSMTPServerPort) {
 		this.mailSMTPServer = mailSMTPServer;
 		this.mailSMTPServerPort = mailSMTPServerPort;
 	}
@@ -46,36 +36,27 @@ public class SendMail {
 		// atribua as propriedades do SERVIDOR PROXY utilizado
 		/*
 		 * props.setProperty("proxySet","true");
-		 * props.setProperty("socksProxyHost","192.168.155.1"); // IP do
-		 * Servidor Proxy props.setProperty("socksProxyPort","1080"); // Porta
-		 * do servidor Proxy
+		 * props.setProperty("socksProxyHost","ip do proxy"); // IP do Servidor Proxy 
+		 * props.setProperty("socksProxyPort","porta do proxy"); // Porta do servidor Proxy
 		 */
 		props.put("mail.transport.protocol", "smtp"); // define protocolo de
 														// envio como SMTP
 		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.host", mailSMTPServer); // server SMTP do GMAIL
+		props.put("mail.smtp.host", mailSMTPServer); // server SMTP
 		props.put("mail.smtp.auth", "true"); // ativa autenticacao
-		props.put("mail.smtp.user", from); // usuario ou seja, a conta que esta
-											// enviando o email (tem que ser do
-											// GMAIL)
-		props.put("mail.debug", "true");
+		props.put("mail.smtp.user", from); // usuario ou seja, a conta que esta enviando o email  
+		props.put("mail.debug", "true"); //ativa o debug
 		props.put("mail.smtp.port", mailSMTPServerPort); // porta
-		props.put("mail.smtp.socketFactory.port", mailSMTPServerPort); // mesma
-																		// porta
-																		// para
-																		// o
-																		// socket
+		props.put("mail.smtp.socketFactory.port", mailSMTPServerPort); // mesma port para o socket
 		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 		props.put("mail.smtp.socketFactory.fallback", "false");
 		// Cria um autenticador que sera usado a seguir
 
-		 Authenticator auth = new Authenticator() {
-	            public PasswordAuthentication getPasswordAuthentication() {
-	                return new PasswordAuthentication(
-	                                   Autenticacao.getEmail(), Autenticacao.getSenha()
-	                 );
-	            }
-	        };
+		Authenticator auth = new Authenticator() {
+			public PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(Autenticacao.getEmail(), Autenticacao.getSenha());
+			}
+		};
 
 		// Session - objeto que ira realizar a conexão com o servidor
 		/*
@@ -86,7 +67,7 @@ public class SendMail {
 		Session session = Session.getDefaultInstance(props, auth);
 		session.setDebug(true); // Habilita o LOG das ações executadas durante o
 								// envio do email
-	
+
 		// Objeto que contém a mensagem
 		Message msg = new MimeMessage(session);
 		try {
@@ -106,11 +87,10 @@ public class SendMail {
 		Transport tr;
 		try {
 			tr = session.getTransport("smtp"); // define smtp para transporte
+			
 			/*
-			 * 1 - define o servidor smtp 2 - seu nome de usuario do gmail 3 -
-			 * sua senha do gmail
+			 * 1 - define o servidor smtp 2 - seu nome de usuario do 3 - sua senha 
 			 */
-
 			tr.connect(mailSMTPServer, Autenticacao.getEmail(), Autenticacao.getSenha());
 
 			msg.saveChanges(); // don't forget this
@@ -118,10 +98,9 @@ public class SendMail {
 			tr.sendMessage(msg, msg.getAllRecipients());
 			tr.close();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			System.out.println(">> Erro: Envio Mensagem");
 			e.printStackTrace();
 		}
 	}
-	
+
 }

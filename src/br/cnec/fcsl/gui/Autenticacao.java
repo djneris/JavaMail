@@ -8,7 +8,6 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import br.cnec.fcsl.sistema.CheckingMails;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -57,7 +56,7 @@ public class Autenticacao extends JDialog implements ActionListener {
 	 */
 	public Autenticacao() {
 		setTitle("Configura\u00E7\u00E3o do Servidor");
-		setBounds(100, 100, 466, 358);
+		setBounds(100, 100, 466, 313);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -84,37 +83,37 @@ public class Autenticacao extends JDialog implements ActionListener {
 				.addGroup(gl_contentPanel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
-						.addComponent(campoSenha, GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
+						.addComponent(panel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
+						.addComponent(comboBox, 0, 420, Short.MAX_VALUE)
+						.addComponent(lblEscolhaOServido)
+						.addComponent(lblEmail)
 						.addComponent(lblSenha)
 						.addComponent(campoEmail, GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
-						.addComponent(lblEmail)
-						.addComponent(comboBox, 0, 420, Short.MAX_VALUE)
-						.addComponent(lblEscolhaOServido))
+						.addComponent(campoSenha, GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_contentPanel.setVerticalGroup(
 			gl_contentPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPanel.createSequentialGroup()
+				.addGroup(Alignment.LEADING, gl_contentPanel.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblEscolhaOServido)
 					.addGap(13)
 					.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(65)
-					.addComponent(lblEmail)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(campoEmail, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
+					.addComponent(lblEmail)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(campoEmail, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGap(25)
 					.addComponent(lblSenha)
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(campoSenha, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(35)
+					.addGap(25)
 					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
-					.addContainerGap())
+					.addGap(51))
 		);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		botaoOk = new JButton("Enviar Email");
+		botaoOk = new JButton("OK");
 		botaoOk.addActionListener(this);
 		panel.add(botaoOk);
 		contentPanel.setLayout(gl_contentPanel);
@@ -129,7 +128,7 @@ public class Autenticacao extends JDialog implements ActionListener {
 		if(comboBox.getSelectedIndex() == 0){
 			setServidorSMTP("smtp.gmail.com");
 			setServidorPop3("pop.gmail.com");
-		}else{
+		}else if(comboBox.getSelectedIndex() == 1){
 			setServidorSMTP("smtp.mail.yahoo.com");
 			setServidorPop3("pop.mail.yahoo.com");
 		}
@@ -137,7 +136,7 @@ public class Autenticacao extends JDialog implements ActionListener {
 		setEmail(campoEmail.getText());
 		setSenha(campoSenha.getText());
 		
-		new Email().setVisible(true);		
+		new Opcoes().setVisible(true);	
 	}
 
 	public static String getSenha() {
