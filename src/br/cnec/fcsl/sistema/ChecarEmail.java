@@ -9,64 +9,75 @@ import javax.mail.NoSuchProviderException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Store;
+import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+
+import br.cnec.fcsl.gui.Mensagem;
 
 public class ChecarEmail {
+	
+	private String ms = "";
 
-   public void checar(String host, String user, String password) {
-	   
-      try {
+	public String getMs() {
+		return ms;
+	}
 
-      // propriedades da conexão
-      Properties properties = new Properties();
-      
-      properties.put("mail.pop3s.host", host);
-      properties.put("mail.pop3s.port", "995");
-      properties.put("mail.pop3s.starttls.enable", "true");
+	public void setMs(String ms) {
+		this.ms = ms;
+	}
 
-      // autenticação
-      Session emailSession = Session.getInstance(properties,
-         new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-               return new PasswordAuthentication(user, password);
-            }
-         });
-      //emailSession.setDebug(true);
+	public void checar(String serverPop, String user, String password) {
 
-      // Criação do objeto de armazenamento POP3 e conexão com o servidor pop
-      Store store = emailSession.getStore("pop3s");
+		try {
 
-      store.connect();
+			// propriedades da conexão
+			Properties properties = new Properties();
 
-      // leitura da caixa de entrada
-      Folder emailFolder = store.getFolder("INBOX");
-      emailFolder.open(Folder.READ_ONLY);
+			properties.put("mail.pop3s.host", serverPop);//servidor pop3
+			properties.put("mail.pop3s.port", "995");//porta pop3
+			properties.put("mail.pop3s.starttls.enable", "true");
 
-      // Recuperar as mensagens da pasta em um array e exibi-lo
-      Message[] messages = emailFolder.getMessages();
-      System.out.println("messages.length---" + messages.length);
+			// autenticação
+			Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication(user, password);
+				}
+			});
+			session.setDebug(true);
 
-      for (int i = 0, n = messages.length; i < n; i++) {
-         Message message = messages[i];
-         System.out.println("---------------------------------");
-         System.out.println("Email " + (i + 1));
-         System.out.println("Assunto: " + message.getSubject());
-         System.out.println("De: " + message.getFrom()[0]);
-         System.out.println("Texto: " + message.getContent().toString());
-      }
+			// Criação do objeto de armazenamento POP3 e conexão com o servidor
+			// pop
+			Store store = session.getStore("pop3s");
 
-      // fechando conexoes 
-      emailFolder.close(false);
-      store.close();
+			store.connect();
 
-      } catch (NoSuchProviderException e) {
-         e.printStackTrace();
-      } catch (MessagingException e) {
-         e.printStackTrace();
-      } catch (Exception e) {
-         e.printStackTrace();
-      }
-      
-   }
+			// leitura da caixa de entrada
+			Folder emailFolder = store.getFolder("INBOX");
+			emailFolder.open(Folder.READ_ONLY);
 
- 
+			// Recuperar as mensagens da pasta em um array e exibi-lo
+			Message[] messages = emailFolder.getMessages();
+			
+			for (int i = 0; i < messages.length; i++) {
+				Message message = messages[i];
+				
+				ms += "Email " + (i + 1) +" \n"+
+						"Assunto " + message.getSubject() + "\n"+
+						"De: " + message.getFrom()[0] +"\n"+
+						"Texto: " + message.getContent().toString() +"\n\n";
+			}			
+
+			// fechando conexoes
+			emailFolder.close(false);
+			store.close();
+
+		} catch (NoSuchProviderException e) {
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }

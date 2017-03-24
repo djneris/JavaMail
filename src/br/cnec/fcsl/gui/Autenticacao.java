@@ -31,9 +31,9 @@ public class Autenticacao extends JFrame implements ActionListener {
 	private JButton botaoOk;
 	private static String senha;
 	private static String email;
-	private static String servidorSMTP;
+	private static String servidorSMTP;//servidor para envio de emails
 	private static String portaSMTP = "465";
-	private static String servidorPop3;
+	private static String servidorPop3;//servidor que recebe os emails
 	private static String portaPop3 = "995";
 
 	/**
@@ -56,6 +56,7 @@ public class Autenticacao extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public Autenticacao() {
+		setTitle("Configura\u00E7\u00E3o");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 273);
 		this.setLocationRelativeTo(null);
@@ -126,19 +127,19 @@ public class Autenticacao extends JFrame implements ActionListener {
 	}
 	protected void do_botaoOk_actionPerformed(ActionEvent e) {
 		
-		if(comboBox.getSelectedIndex() == 0){
+		if(comboBox.getSelectedIndex() == 0){//seta as configuraçoes do gmail
 			setServidorSMTP("smtp.gmail.com");
 			setServidorPop3("pop.gmail.com");
-		}else if(comboBox.getSelectedIndex() == 1){
+		}else if(comboBox.getSelectedIndex() == 1){//seta as configuraçoes do yahoo
 			setServidorSMTP("smtp.mail.yahoo.com");
 			setServidorPop3("pop.mail.yahoo.com");
 		}
 		
-		setEmail(campoEmail.getText());
-		setSenha(campoSenha.getText());
+		setEmail(campoEmail.getText());//seta o email
+		setSenha(campoSenha.getText());//seta a senha
 		
-		new Opcoes().setVisible(true);	
-		
+		new Opcoes().setVisible(true);
+				
 	}
 
 	public static String getSenha() {

@@ -16,12 +16,16 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 public class Opcoes extends JDialog implements ActionListener {
 
 	private final JPanel contentPanel = new JPanel();
 	private JButton btnNewButton;
 	private JButton btnNewButton_1;
+	private JScrollPane scrollPane;
+	private JTextArea textArea;
 
 	/**
 	 * Launch the application.
@@ -41,7 +45,7 @@ public class Opcoes extends JDialog implements ActionListener {
 	 */
 	public Opcoes() {
 		setTitle("Op\u00E7\u00F5es");
-		setBounds(100, 100, 300, 152);
+		setBounds(100, 100, 601, 400);
 		this.setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -54,25 +58,35 @@ public class Opcoes extends JDialog implements ActionListener {
 		btnNewButton_1 = new JButton("Ler E-mail");
 		btnNewButton_1.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnNewButton_1.addActionListener(this);
+		
+		scrollPane = new JScrollPane();
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
 		gl_contentPanel.setHorizontalGroup(
-			gl_contentPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPanel.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(btnNewButton_1, GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
-					.addGap(16))
-		);
-		gl_contentPanel.setVerticalGroup(
 			gl_contentPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(Alignment.TRAILING, gl_contentPanel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
-						.addComponent(btnNewButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-						.addComponent(btnNewButton_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE))
+						.addComponent(scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
+						.addGroup(gl_contentPanel.createSequentialGroup()
+							.addComponent(btnNewButton_1, GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)))
+					.addGap(16))
+		);
+		gl_contentPanel.setVerticalGroup(
+			gl_contentPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, gl_contentPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(btnNewButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(btnNewButton_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
+					.addGap(13)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
 					.addContainerGap())
 		);
+		
+		textArea = new JTextArea();
+		scrollPane.setViewportView(textArea);
 		contentPanel.setLayout(gl_contentPanel);
 	}
 	public void actionPerformed(ActionEvent e) {
@@ -86,9 +100,10 @@ public class Opcoes extends JDialog implements ActionListener {
 	protected void do_btnNewButton_1_actionPerformed(ActionEvent e) {
 		ChecarEmail ck = new ChecarEmail();
 		ck.checar(Autenticacao.getServidorPop3(), Autenticacao.getEmail(), Autenticacao.getSenha());
+		textArea.setText(ck.getMs());
 	}
 	protected void do_btnNewButton_actionPerformed(ActionEvent e) {
 		new Email().setVisible(true);
-		dispose();
+		this.dispose();
 	}
 }

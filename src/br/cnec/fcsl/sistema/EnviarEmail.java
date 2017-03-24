@@ -74,14 +74,12 @@ public class EnviarEmail {
 			// Setando a origem do email
 			msg.setFrom(new InternetAddress(usuario));
 			// Setando o destinatário
-			Address[] usuarios = InternetAddress.parse(destino);			
-			msg.setRecipients(Message.RecipientType.TO, usuarios);		
+			Address[] usuarios = InternetAddress.parse(destino);//cria vetor de endereços dos destinatarios			
+			msg.setRecipients(Message.RecipientType.TO, usuarios);	
 			// Setando o assunto
 			msg.setSubject(assunto);
 			// Setando o conteúdo/corpo do email
-			msg.setContent(mensagem, "text/plain");
-			
-			
+			msg.setContent(mensagem, "text/html");			
 		
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Completar Mensagem");

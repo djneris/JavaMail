@@ -47,6 +47,7 @@ public class Email extends JDialog implements ActionListener {
 	 * Create the dialog.
 	 */
 	public Email() {
+		setTitle(Autenticacao.getEmail());
 		setBounds(100, 100, 450, 341);
 		this.setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
@@ -117,8 +118,10 @@ public class Email extends JDialog implements ActionListener {
 
 	protected void do_btnEnviar_actionPerformed(ActionEvent e) {
 
-		EnviarEmail sm = new EnviarEmail(Autenticacao.getServidorSMTP(), Autenticacao.getPortaSMTP());
+		EnviarEmail sm = new EnviarEmail(Autenticacao.getServidorSMTP(), Autenticacao.getPortaSMTP());//passa servidor e a porta 
 		sm.sendMail(Autenticacao.getEmail(), campoDestino.getText(), campoAssunto.getText(),
-				campoMensagem.getText());
+				campoMensagem.getText());//passa todos os parametros requisitados
+		
+		
 	}
 }
